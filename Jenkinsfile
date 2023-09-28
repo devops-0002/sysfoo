@@ -41,6 +41,12 @@ pipeline {
       }
     }
 
+    stage('container image') {
+      steps {
+        sleep 5
+      }
+    }
+
   }
   tools {
     maven 'Maven 3.6.3'
