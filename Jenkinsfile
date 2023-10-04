@@ -1,5 +1,10 @@
 pipeline {
-  agent any
+  agent {
+    docker {
+      image 'maven:3.6.3-jdk-11-slim'
+    }
+
+  }
   stages {
     stage('build') {
       steps {
@@ -8,28 +13,10 @@ pipeline {
       }
     }
 
-    stage('test') {
-      parallel {
-        stage('unit test') {
-          steps {
-            echo 'running unit tests...'
-            sh 'mvn clean test'
-          }
-        }
-
-        stage('SCA') {
-          steps {
-            echo 'Software Component Analysis'
-            sleep 5
-          }
-        }
-
-        stage('SAST') {
-          steps {
-            sleep 9
-          }
-        }
-
+    stage('unit test') {
+      steps {
+        echo 'running unit tests...'
+        sh 'mvn clean test'
       }
     }
 
@@ -41,15 +28,6 @@ pipeline {
       }
     }
 
-    stage('container image') {
-      steps {
-        sleep 5
-      }
-    }
-
-  }
-  tools {
-    maven 'Maven 3.6.3'
   }
   post {
     always {
